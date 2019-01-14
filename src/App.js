@@ -28,7 +28,7 @@ class App extends Component {
   componentDidMount = () => {
     setTimeout(() => {
       this.setState({ checkAuth: true });
-    }, 5000);
+    }, 1000);
   }
 
   setLoggedIn = (isLoggedIn) => {
