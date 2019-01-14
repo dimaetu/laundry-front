@@ -1,0 +1,12 @@
+@font-face {
+  font-family: 'GoshaSans-Bold';
+  src: url('../fonts/GoshaSans-Bold.eot');
+  src: url('../fonts/GoshaSans-Bold.woff2') format('woff2'),
+       url('../fonts/GoshaSans-Bold.woff') format('woff'),
+       url('../fonts/GoshaSans-Bold.ttf') format('truetype'),
+       url('../fonts/GoshaSans-Bold.svg#GoshaSans-Bold') format('svg'),
+       url('../fonts/GoshaSans-Bold.eot?#iefix') format('embedded-opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
