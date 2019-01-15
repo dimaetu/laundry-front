@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
  
 const { Provider, Consumer } = React.createContext({
-  isLoggedIn: false,
+  auth: false,
+  dorm: null,
+  floor: null,
+  room: '',
 });
  
 export class AuthProvider extends Component {
@@ -11,14 +14,22 @@ export class AuthProvider extends Component {
   }
 }
  
-export const withAuthLeave = Component => props => (
+export const withAuth = Component => (props) => (
   <Consumer>
-    {isLoggedIn => (isLoggedIn ? <Component {...props} /> : <Redirect to="/" />)}
+    {
+      ({auth}) => (
+        auth ? <Component {...props} /> : <Redirect to="/" />
+      )
+    }
   </Consumer>
 )
 
-export const withAuthEnter = Component => props => (
+export const withAuthSettings = Component => props => (
   <Consumer>
-    {isLoggedIn => (isLoggedIn ? <Redirect to="/admin" /> : <Component {...props} />)}
+    {
+      ({auth, dorm, floor, room}) => (
+        auth && dorm && floor && room ? <Component {...props} /> : <Redirect to="/" />
+      )
+    }
   </Consumer>
 )
