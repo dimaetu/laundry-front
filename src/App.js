@@ -4,37 +4,25 @@ import { MainLayout } from './layouts';
 import { Home, EndRegistration, Settings, Timetable, NotFound } from './pages';
 import { upAuth, onlyGuest, onlyAuth, onlyFullAuth } from './components';
 
-const AccessHome = () => {
-  return onlyGuest(Home);
-}
-
-const AccessEndRegistration = () => {
-  return onlyAuth(EndRegistration);
-}
-
-const AccessTimetable = () => {
-  return onlyFullAuth(Timetable);
-}
-
-const MainPage = () => (
-  <Fragment>
-    <h1>SDsad</h1>
-    <h2>asdsad</h2>
-    <AccessHome />
-    <AccessEndRegistration />
-    <AccessTimetable />
-  </Fragment>
-)
-
 class App extends Component {
   render() {
+    const AccessHome = onlyGuest(Home);
+    const AccessEndRegistration = onlyAuth(EndRegistration);
+    const AccessTimetable = onlyFullAuth(Timetable);
+
     return (
       <Router>
         <MainLayout>
           <Switch>
-            <Route path="/" component={MainPage} />
-            <Route path="/settings" component={upAuth(Settings)}/>
-            <Route path="/timetable" component={onlyFullAuth(Timetable)}/>
+            <Route exact path="/" render={() => (
+              <Fragment>
+                <AccessHome />
+                <AccessEndRegistration />
+                <AccessTimetable />
+              </Fragment>
+            )}/>
+            <Route exact path="/settings" component={upAuth(Settings)}/>
+            <Route exact path="/timetable" component={onlyFullAuth(Timetable)}/>
             <Route component={NotFound} />
           </Switch>
         </MainLayout>
