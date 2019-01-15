@@ -1,28 +1,16 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import { MainLayout } from './layouts';
+import { Home, EndRegistration, Settings, Timetable, NotFound } from './pages';
 import { Loader } from './components';
-
-const Home = (props) => (
-  <h1>Route /</h1>
-)
-
-const Settings = (props) => (
-  <h1>Route /settings</h1>
-)
-
-const Timetable = (props) => (
-  <h1>Route /timetable</h1>
-)
-
-const NotFound = (props) => (
-  <h1>NotFound</h1>
-)
 
 class App extends Component {
   state = {
     checkAuth: false,
-    isLoggedIn: false,
+    auth: false,
+    dorm: null,
+    floor: null,
+    room: '',
   };
 
   componentDidMount = () => {
@@ -31,18 +19,46 @@ class App extends Component {
     }, 1000);
   }
 
-  setLoggedIn = (isLoggedIn) => {
-    this.setState({ isLoggedIn });
+  setLoggedIn = (value) => {
+    this.setState({
+      auth: value.auth,
+      dorm: value.dorm,
+      floor: value.floor,
+      room: value.room,
+    });
   }
 
   render() {
-    return this.state.checkAuth ? (
+    const { checkAuth, auth, dorm, floor, room } = this.state;
+    return checkAuth ? (
       <Router>
         <MainLayout>
           <Switch>
-            <Route exact path="/" render={() => <Home />} />
-            <Route exact path="/settings" render={() => <Settings />} />
-            <Route exact path="/timetable" render={() => <Timetable />}/>
+            <Route exact path="/" render={
+              auth ? (
+                !dorm || !floor || !room ? () => (
+                  <EndRegistration setLoggedIn={this.setLoggedIn}/>
+                ):() => (
+                  <Timetable setLoggedIn={this.setLoggedIn}/>
+                )
+              ):() => (
+                <Home setLoggedIn={this.setLoggedIn}/>
+              )
+            } />
+            <Route exact path="/settings" render={
+              auth ? () => (
+                <Settings setLoggedIn={this.setLoggedIn}/>
+              ):() => (
+                <Redirect to="/" />
+              )
+            } />
+            <Route exact path="/timetable" render={
+              auth && dorm && floor && room ? () => (
+                <Timetable setLoggedIn={this.setLoggedIn}/>
+              ):() => (
+                <Redirect to="/" />
+              )
+            }/>
             <Route component={NotFound} />
           </Switch>
         </MainLayout>
