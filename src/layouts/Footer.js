@@ -7,7 +7,7 @@ import { containerStyle } from '../components';
 const StyledFooter = styled.footer`
   padding: 32px 0;
   min-height: 100px;
-  background-color: #eee;
+  background-color: ${ indigo[50] };
 `;
 
 const FooterContainer = styled.div`
@@ -32,7 +32,7 @@ const Footer = () => (
   <StyledFooter>
     <FooterContainer>
       <Typography variant="h6" component="p" gutterBottom>
-        Сделано <Link href="https://vk.com/wanku">Иваном</Link> и <Link href="https://vk.com/dimaetu">Дмитрием</Link><br />
+        Сделали <Link href="https://vk.com/wanku">Иван</Link> и <Link href="https://vk.com/dimaetu">Дмитрий</Link><br />
       </Typography>
       <Typography variant="subtitle2" component="p" gutterBottom>
         из команды <ITCLink href="https://vk.com/itc.digital"> ITC </ITCLink>
