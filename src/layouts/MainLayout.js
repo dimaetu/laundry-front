@@ -3,11 +3,11 @@ import { Header, Footer } from './';
 import styled from 'styled-components';
 
 const Main = styled.main`
-  padding: 32px 16px;
+  padding: 0 16px 32px;
   flex-grow: 1;
 
   @media (min-width: 600px) {
-    padding: 32px 24px;
+    padding: 0 24px 32px;
   }
 `;
 
