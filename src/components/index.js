@@ -2,7 +2,10 @@ import Loader from './Loader';
 import { AuthProvider, upGuest, upAuth, onlyGuest, onlyAuth, onlyFullAuth } from './AuthProvider';
 import Jumbotron from './Jumbotron';
 import { containerStyle } from './containerStyle';
-import AboutSite from './AboutWash';
+import Title from './Title';
+import AboutSite from './AboutSite';
+import Reasons from './Reasons';
+import HowTo from './HowTo';
 
 export {
   Loader,
@@ -10,4 +13,7 @@ export {
   Jumbotron,
   containerStyle,
   AboutSite,
+  Reasons,
+  HowTo,
+  Title,
 }
