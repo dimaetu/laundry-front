@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { AppBar, Toolbar, Avatar, Button, MenuItem, Menu } from '@material-ui/core';
 import styled from 'styled-components';
+import ITCLogo from '../images/ITCLogo.svg';
 
 const LeftBar = styled.div`
   display: flex;
@@ -32,7 +33,7 @@ const Name = styled.span`
 `;
 
 const ButtonText = styled.span`
-  line-height: 40px;
+  line-height: 32px;
   color: #fff;
 `;
 
@@ -58,7 +59,7 @@ class Header extends Component {
       <AppBar position="static">
         <Toolbar>
           <LeftBar>
-            <Logo src={process.env.PUBLIC_URL + 'images/ITCLogo.svg'} />
+            <Logo src={ITCLogo} />
             <Title>
               Стирка
             </Title>
