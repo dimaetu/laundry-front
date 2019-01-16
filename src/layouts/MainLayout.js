@@ -3,12 +3,8 @@ import { Header, Footer } from './';
 import styled from 'styled-components';
 
 const Main = styled.main`
-  padding: 0 16px 32px;
+  padding-bottom: 32px;
   flex-grow: 1;
-
-  @media (min-width: 600px) {
-    padding: 0 24px 32px;
-  }
 `;
 
 class MainLayout extends Component {
