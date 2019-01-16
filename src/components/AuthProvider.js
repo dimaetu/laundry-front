@@ -14,10 +14,10 @@ const { Provider, Consumer } = React.createContext({
 export class AuthProvider extends Component {
   state = {
     checkAuth: false,
-    auth: true,
-    dorm: 12,
-    floor: 23,
-    room: '1232',
+    auth: false,
+    dorm: null,
+    floor: null,
+    room: '',
     setLoggedIn: this.setLoggedIn,
     logout: this.logout,
   };
