@@ -1,12 +1,21 @@
 import React, { Component, Fragment } from 'react';
+import { Link } from 'react-router-dom';
 import { AppBar, Toolbar, Avatar, Button, MenuItem, Menu } from '@material-ui/core';
 import styled from 'styled-components';
+import { upGuest } from '../components';
 import ITCLogo from '../images/ITCLogo.svg';
 
 const LeftBar = styled.div`
   display: flex;
   flex-grow: 1;
+  align-items: stretch;
+`;
+
+const ToHome = styled(Link)`
+  display: flex;
+  flex-grow: 0;
   align-items: center;
+  text-decoration: none;
 `;
 
 const RightBar = styled.div`
@@ -23,6 +32,7 @@ const Title = styled.h1`
   font-family: 'GoshaSans-Bold', sans-serif;
   font-size: 24px;
   text-transform: uppercase;
+  color: #fff;
 `;
 
 const Name = styled.span`
@@ -39,7 +49,6 @@ const ButtonText = styled.span`
 
 class Header extends Component {
   state = {
-    isLoggedIn: false,
     anchorEl: null,
   };
 
@@ -52,20 +61,22 @@ class Header extends Component {
   };
 
   render() {
-    const { isLoggedIn, anchorEl } = this.state;
+    const { anchorEl } = this.state;
     const open = Boolean(anchorEl);
 
     return (
       <AppBar position="static">
         <Toolbar>
           <LeftBar>
-            <Logo src={ITCLogo} />
-            <Title>
-              Стирка
-            </Title>
+            <ToHome to="/">
+              <Logo src={ITCLogo} />
+              <Title>
+                Стирка
+              </Title>
+            </ToHome>
           </LeftBar>
           <RightBar>
-          {isLoggedIn ? (
+          {this.props.auth ? (
             <Fragment>
               <Button
                 aria-owns={open ? 'menu-appbar' : undefined}
@@ -89,10 +100,10 @@ class Header extends Component {
                 open={open}
                 onClose={this.handleClose}
               >
-                <MenuItem>
+                <MenuItem onClick={this.handleClose} component={Link} to="/settings">
                   Настройки
                 </MenuItem>
-                <MenuItem>
+                <MenuItem onClick={this.handleClose}>
                   Выход
                 </MenuItem>
               </Menu>
@@ -107,4 +118,4 @@ class Header extends Component {
   }
 }
 
-export default Header;
+export default upGuest(Header);
