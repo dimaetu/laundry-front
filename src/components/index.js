@@ -6,6 +6,7 @@ import Title from './Title';
 import AboutSite from './AboutSite';
 import Reasons from './Reasons';
 import HowTo from './HowTo';
+import { requestGET, requestPOST } from './Requests';
 
 export {
   Loader,
@@ -16,4 +17,5 @@ export {
   Reasons,
   HowTo,
   Title,
+  requestGET, requestPOST,
 }
