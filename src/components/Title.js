@@ -4,6 +4,7 @@ import styled from 'styled-components';
 const Title = styled.h2`
   font-family: 'GoshaSans-Bold';
   font-size: 2rem;
+  font-weight: 400;
   color: ${ indigo[500] };
 
   @media (min-width: 600px) {

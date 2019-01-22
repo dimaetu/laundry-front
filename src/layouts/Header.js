@@ -31,6 +31,7 @@ const Title = styled.h1`
   margin-left: 8px;
   font-family: 'GoshaSans-Bold', sans-serif;
   font-size: 24px;
+  font-weight: 400;
   text-transform: uppercase;
   color: #fff;
 `;

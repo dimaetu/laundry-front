@@ -42,6 +42,7 @@ const Container = styled.div`
 const Text = styled.h1`
   font-family: 'GoshaSans-Bold', sans-serif;
   font-size: 2.5rem;
+  font-weight: 400;
   text-align: right;
   color: ${ indigo[500] };
 

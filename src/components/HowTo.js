@@ -20,6 +20,7 @@ const ListItem = styled.li`
   margin-bottom: 32px;
   font-family: 'GoshaSans-Bold';
   font-size: 2rem;
+  font-weight: 400;
   color: ${ indigo[500] };
 
   @media (min-width: 600px) {
