@@ -1,7 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSpinner } from '@fortawesome/free-solid-svg-icons';
-import { Grid } from '@material-ui/core';
+import { Grid, CircularProgress } from '@material-ui/core';
 import { Portal } from 'react-portal';
 import styled from 'styled-components'
 
@@ -29,7 +27,7 @@ class Loader extends Component {
               direction="row"
             >
               <Grid item>
-                <FontAwesomeIcon icon={faSpinner} size="4x" pulse />
+                <CircularProgress size={80} />
               </Grid>
             </StyledGrid>
           </Portal>
