@@ -158,7 +158,7 @@ export const onlyAuth = Component => (props) => (
   <Consumer>
     {
       ({auth, name, vkId, avatar, dormId, floorId, roomId, role, setLoggedIn, logout}) => (
-        auth && (!dorm || !floor || !room) &&
+        auth && (!dormId || !floorId || !roomId) &&
         <Component
           auth={auth}
           name={name}
@@ -181,7 +181,7 @@ export const onlyFullAuth = Component => (props) => (
   <Consumer>
     {
       ({auth, name, vkId, avatar, dormId, floorId, roomId, role, setLoggedIn, logout}) => (
-        auth && dorm && floor && room ? 
+        auth && dormId && floorId && roomId ? 
           <Component
             auth={auth}
             name={name}
