@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import Loader from './Loader';
+import { requestGET } from './Requests';
  
 const { Provider, Consumer } = React.createContext({
   auth: false,
-  dorm: null,
-  floor: null,
-  room: '',
+  name: '',
+  vkId: '',
+  avatar: '',
+  dormId: null,
+  floorId: null,
+  roomId: null,
+  role: null,
   setLoggedIn: () => (null),
   logout: () => (null),
 });
@@ -15,9 +20,13 @@ export class AuthProvider extends Component {
   state = {
     checkAuth: false,
     auth: false,
-    dorm: null,
-    floor: null,
-    room: '',
+    name: '',
+    vkId: '',
+    avatar: '',
+    dormId: null,
+    floorId: null,
+    roomId: null,
+    role: null,
     setLoggedIn: this.setLoggedIn,
     logout: this.logout,
   };
@@ -25,25 +34,39 @@ export class AuthProvider extends Component {
   setLoggedIn = (value) => {
     this.setState({
       auth: value.auth,
-      dorm: value.dorm,
-      floor: value.floor,
-      room: value.room,
+      name: value.name,
+      vkId: value.vk_id,
+      avatar: value.avatar,
+      dormId: value.dorm_id,
+      floorId: value.floor_id,
+      roomId: value.room_id,
+      role: value.role,
+    }, () => {
+      console.log(this.state);
     });
   }
 
   logout = () => {
     this.setState({
       auth: false,
-      dorm: null,
-      floor: null,
-      room: '',
+      name: '',
+      vkId: '',
+      avatar: '',
+      dormId: null,
+      floorId: null,
+      roomId: null,
+      role: null,
     });
   }
 
   componentDidMount = () => {
-    setTimeout(() => {
+    requestGET('/api/user/info').then((res) => {
+      res.auth && this.setLoggedIn(res);
+    }).catch((err) => {
+      console.log(err);
+    }).finally(() => {
       this.setState({ checkAuth: true });
-    }, 1000);
+    });
   }
 
   render() {
@@ -64,12 +87,16 @@ export class AuthProvider extends Component {
 export const upGuest = Component => (props) => (
   <Consumer>
     {
-      ({auth, dorm, floor, room, setLoggedIn, logout}) => (
+      ({auth, name, vkId, avatar, dormId, floorId, roomId, role, setLoggedIn, logout}) => (
         <Component
           auth={auth}
-          dorm={dorm}
-          floor={floor}
-          room={room}
+          name={name}
+          vkId={vkId}
+          avatar={avatar}
+          dormId={dormId}
+          floorId={floorId}
+          roomId={roomId}
+          role={role}
           setLoggedIn={setLoggedIn}
           logout={logout}
           {...props} 
@@ -82,13 +109,17 @@ export const upGuest = Component => (props) => (
 export const upAuth = Component => (props) => (
   <Consumer>
     {
-      ({auth, dorm, floor, room, setLoggedIn, logout}) => (
+      ({auth, name, vkId, avatar, dormId, floorId, roomId, role, setLoggedIn, logout}) => (
         auth ?
           <Component
             auth={auth}
-            dorm={dorm}
-            floor={floor}
-            room={room}
+            name={name}
+            vkId={vkId}
+            avatar={avatar}
+            dormId={dormId}
+            floorId={floorId}
+            roomId={roomId}
+            role={role}
             setLoggedIn={setLoggedIn}
             logout={logout}
             {...props} 
@@ -103,13 +134,17 @@ export const upAuth = Component => (props) => (
 export const onlyGuest = Component => (props) => (
   <Consumer>
     {
-      ({auth, dorm, floor, room, setLoggedIn, logout}) => (
+      ({auth, name, vkId, avatar, dormId, floorId, roomId, role, setLoggedIn, logout}) => (
         !auth &&
         <Component
           auth={auth}
-          dorm={dorm}
-          floor={floor}
-          room={room}
+          name={name}
+          vkId={vkId}
+          avatar={avatar}
+          dormId={dormId}
+          floorId={floorId}
+          roomId={roomId}
+          role={role}
           setLoggedIn={setLoggedIn}
           logout={logout}
           {...props} 
@@ -122,13 +157,17 @@ export const onlyGuest = Component => (props) => (
 export const onlyAuth = Component => (props) => (
   <Consumer>
     {
-      ({auth, dorm, floor, room, setLoggedIn, logout}) => (
+      ({auth, name, vkId, avatar, dormId, floorId, roomId, role, setLoggedIn, logout}) => (
         auth && (!dorm || !floor || !room) &&
         <Component
           auth={auth}
-          dorm={dorm}
-          floor={floor}
-          room={room}
+          name={name}
+          vkId={vkId}
+          avatar={avatar}
+          dormId={dormId}
+          floorId={floorId}
+          roomId={roomId}
+          role={role}
           setLoggedIn={setLoggedIn}
           logout={logout}
           {...props} 
@@ -141,13 +180,17 @@ export const onlyAuth = Component => (props) => (
 export const onlyFullAuth = Component => (props) => (
   <Consumer>
     {
-      ({auth, dorm, floor, room, setLoggedIn, logout}) => (
+      ({auth, name, vkId, avatar, dormId, floorId, roomId, role, setLoggedIn, logout}) => (
         auth && dorm && floor && room ? 
           <Component
             auth={auth}
-            dorm={dorm}
-            floor={floor}
-            room={room}
+            name={name}
+            vkId={vkId}
+            avatar={avatar}
+            dormId={dormId}
+            floorId={floorId}
+            roomId={roomId}
+            role={role}
             setLoggedIn={setLoggedIn}
             logout={logout}
             {...props}
