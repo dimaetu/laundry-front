@@ -63,6 +63,7 @@ class Header extends Component {
 
   render() {
     const { anchorEl } = this.state;
+    const { auth, name, avatar } = this.props;
     const open = Boolean(anchorEl);
 
     return (
@@ -77,15 +78,19 @@ class Header extends Component {
             </ToHome>
           </LeftBar>
           <RightBar>
-          {this.props.auth ? (
+          {auth ? (
             <Fragment>
               <Button
                 aria-owns={open ? 'menu-appbar' : undefined}
                 aria-haspopup="true"
                 onClick={this.handleMenu}
               >
-                <Name>Ivan Salugin</Name>
-                <Avatar>IS</Avatar>
+                <Name>{name}</Name>
+                <Avatar>
+                  {avatar ? (
+                    <img src={avatar} />
+                  ) : name.split(/\s+/).map(word => word[0].toUpperCase()).join('') }
+                </Avatar>
               </Button>
               <Menu
                 id="menu-appbar"
@@ -101,16 +106,21 @@ class Header extends Component {
                 open={open}
                 onClose={this.handleClose}
               >
+                <MenuItem onClick={this.handleClose} component={Link} to="/">
+                  Главная
+                </MenuItem>
                 <MenuItem onClick={this.handleClose} component={Link} to="/settings">
                   Настройки
                 </MenuItem>
-                <MenuItem onClick={this.handleClose}>
+                <MenuItem onClick={this.handleClose} component="a" href="/api/logout">
                   Выход
                 </MenuItem>
               </Menu>
             </Fragment>
           ):(
-            <Button><ButtonText>Войти</ButtonText></Button>
+            <Button component="a" href="/api/login">
+              <ButtonText>Войти</ButtonText>
+            </Button>
           )}
           </RightBar>
         </Toolbar>

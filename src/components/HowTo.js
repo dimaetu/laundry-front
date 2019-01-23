@@ -54,7 +54,7 @@ const HowTo = () => (
       </ListItem>
     </List>
     <FabWrapper>
-      <Fab variant="extended" color="primary" component="a" href="https://vk.com/">
+      <Fab variant="extended" color="primary" component="a" href="/api/login">
         Зарегистрироваться
       </Fab>
     </FabWrapper>
