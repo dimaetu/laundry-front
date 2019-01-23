@@ -121,7 +121,6 @@ class Settings extends Component {
       </Container>
     )
   }
-
 }
 
 export default Settings;
