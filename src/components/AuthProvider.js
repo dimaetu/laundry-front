@@ -10,8 +10,7 @@ const { Provider, Consumer } = React.createContext({
   avatar: '',
   roomId: null,
   role: null,
-  setLoggedIn: () => (null),
-  logout: () => (null),
+  updateUser: () => {},
 });
  
 export class AuthProvider extends Component {
@@ -23,8 +22,7 @@ export class AuthProvider extends Component {
     avatar: '',
     roomId: null,
     role: null,
-    setLoggedIn: this.setLoggedIn,
-    logout: this.logout,
+    updateUser: (obj) => this.updateUser(obj),
   };
 
   setLoggedIn = (value) => {
@@ -38,15 +36,8 @@ export class AuthProvider extends Component {
     });
   }
 
-  logout = () => {
-    this.setState({
-      auth: false,
-      name: '',
-      vkId: '',
-      avatar: '',
-      roomId: null,
-      role: null,
-    });
+  updateUser = (obj) => {
+    this.setState(obj, () => console.log(this.state));
   }
 
   componentDidMount = () => {
@@ -77,7 +68,7 @@ export class AuthProvider extends Component {
 export const upGuest = Component => (props) => (
   <Consumer>
     {
-      ({auth, name, vkId, avatar, roomId, role, setLoggedIn, logout}) => (
+      ({auth, name, vkId, avatar, roomId, role, updateUser}) => (
         <Component
           auth={auth}
           name={name}
@@ -85,8 +76,7 @@ export const upGuest = Component => (props) => (
           avatar={avatar}
           roomId={roomId}
           role={role}
-          setLoggedIn={setLoggedIn}
-          logout={logout}
+          updateUser={updateUser}
           {...props} 
         />
       )
@@ -97,7 +87,7 @@ export const upGuest = Component => (props) => (
 export const upAuth = Component => (props) => (
   <Consumer>
     {
-      ({auth, name, vkId, avatar, roomId, role, setLoggedIn, logout}) => (
+      ({auth, name, vkId, avatar, roomId, role, updateUser}) => (
         auth ?
           <Component
             auth={auth}
@@ -106,8 +96,7 @@ export const upAuth = Component => (props) => (
             avatar={avatar}
             roomId={roomId}
             role={role}
-            setLoggedIn={setLoggedIn}
-            logout={logout}
+            updateUser={updateUser}
             {...props} 
           />
         :
@@ -120,7 +109,7 @@ export const upAuth = Component => (props) => (
 export const onlyGuest = Component => (props) => (
   <Consumer>
     {
-      ({auth, name, vkId, avatar, roomId, role, setLoggedIn, logout}) => (
+      ({auth, name, vkId, avatar, roomId, role, updateUser}) => (
         !auth &&
         <Component
           auth={auth}
@@ -129,8 +118,7 @@ export const onlyGuest = Component => (props) => (
           avatar={avatar}
           roomId={roomId}
           role={role}
-          setLoggedIn={setLoggedIn}
-          logout={logout}
+          updateUser={updateUser}
           {...props} 
         />
       )
@@ -141,7 +129,7 @@ export const onlyGuest = Component => (props) => (
 export const onlyAuth = Component => (props) => (
   <Consumer>
     {
-      ({auth, name, vkId, avatar, roomId, role, setLoggedIn, logout}) => (
+      ({auth, name, vkId, avatar, roomId, role, updateUser}) => (
         auth && !roomId &&
         <Component
           auth={auth}
@@ -150,8 +138,7 @@ export const onlyAuth = Component => (props) => (
           avatar={avatar}
           roomId={roomId}
           role={role}
-          setLoggedIn={setLoggedIn}
-          logout={logout}
+          updateUser={updateUser}
           {...props} 
         />
       )
@@ -162,7 +149,7 @@ export const onlyAuth = Component => (props) => (
 export const onlyFullAuth = Component => (props) => (
   <Consumer>
     {
-      ({auth, name, vkId, avatar, roomId, role, setLoggedIn, logout}) => (
+      ({auth, name, vkId, avatar, roomId, role, updateUser}) => (
         auth && roomId ? 
           <Component
             auth={auth}
@@ -171,8 +158,7 @@ export const onlyFullAuth = Component => (props) => (
             avatar={avatar}
             roomId={roomId}
             role={role}
-            setLoggedIn={setLoggedIn}
-            logout={logout}
+            updateUser={updateUser}
             {...props}
           />
         :
