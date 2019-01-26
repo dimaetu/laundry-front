@@ -54,7 +54,7 @@ const HowTo = () => (
       </ListItem>
     </List>
     <FabWrapper>
-      <Fab variant="extended" color="primary" component="a" href="/api/login">
+      <Fab variant="extended" color="primary" component="a" href="/api/v1/login">
         Зарегистрироваться
       </Fab>
     </FabWrapper>
