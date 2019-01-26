@@ -10,6 +10,7 @@
     "@material-ui/icons": "^3.0.2",
     "axios": "^0.18.0",
     "i": "^0.3.6",
+    "notistack": "^0.4.1",
     "npm": "^6.5.0",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
