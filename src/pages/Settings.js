@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { FilledInput, InputLabel, MenuItem, FormControl, Select, Fab, Grid } from '@material-ui/core';
 import styled from 'styled-components';
-import { containerStyle, requestGET, Title, Loader } from '../components';
+import { containerStyle, requestGET, requestPOST, Title, Loader } from '../components';
+import { withSnackbar } from 'notistack';
 
 const Container = styled.section`
   padding-top: 32px;
@@ -131,6 +131,26 @@ class Settings extends Component {
     });
   };
 
+  sendRoom = () => {
+    const { enqueueSnackbar, updateUser } = this.props;
+    this.addLoadedElement('sendRoom', () => {
+      requestPOST(`/api/v1/users/current/update`, {
+        room_id: this.state.roomId,
+      }).then((res) => {
+        enqueueSnackbar('Successfully fetched the data.', { 
+          variant: 'success',
+        });
+        updateUser({
+          roomId: this.state.roomId,
+        });
+      }).catch((err) => {
+        console.log(err);
+      }).finally(() => {
+        this.removeLoadedElement('sendRoom');
+      });
+    });
+  }
+
   render() {
     return (
       <Container>
@@ -189,8 +209,7 @@ class Settings extends Component {
                 variant="extended"
                 color="primary"
                 disabled={!this.state.dormId || !this.state.floorId || !this.state.roomId}
-                component={Link}
-                to="/"
+                onClick={this.sendRoom}
               >
                 Сохранить
               </Fab>
@@ -203,4 +222,4 @@ class Settings extends Component {
   }
 }
 
-export default Settings;
+export default withSnackbar(Settings);
