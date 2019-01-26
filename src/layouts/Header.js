@@ -112,13 +112,13 @@ class Header extends Component {
                 <MenuItem onClick={this.handleClose} component={Link} to="/settings">
                   Настройки
                 </MenuItem>
-                <MenuItem onClick={this.handleClose} component="a" href="/api/logout">
+                <MenuItem onClick={this.handleClose} component="a" href="/api/v1/logout">
                   Выход
                 </MenuItem>
               </Menu>
             </Fragment>
           ):(
-            <Button component="a" href="/api/login">
+            <Button component="a" href="/api/v1/login">
               <ButtonText>Войти</ButtonText>
             </Button>
           )}
