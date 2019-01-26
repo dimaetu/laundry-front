@@ -8,8 +8,6 @@ const { Provider, Consumer } = React.createContext({
   name: '',
   vkId: '',
   avatar: '',
-  dormId: null,
-  floorId: null,
   roomId: null,
   role: null,
   setLoggedIn: () => (null),
@@ -23,8 +21,6 @@ export class AuthProvider extends Component {
     name: '',
     vkId: '',
     avatar: '',
-    dormId: null,
-    floorId: null,
     roomId: null,
     role: null,
     setLoggedIn: this.setLoggedIn,
@@ -37,12 +33,8 @@ export class AuthProvider extends Component {
       name: value.name,
       vkId: value.vk_id,
       avatar: value.avatar,
-      dormId: value.dorm_id,
-      floorId: value.floor_id,
       roomId: value.room_id,
       role: value.role,
-    }, () => {
-      console.log(this.state);
     });
   }
 
@@ -52,15 +44,13 @@ export class AuthProvider extends Component {
       name: '',
       vkId: '',
       avatar: '',
-      dormId: null,
-      floorId: null,
       roomId: null,
       role: null,
     });
   }
 
   componentDidMount = () => {
-    requestGET('/api/user/info').then((res) => {
+    requestGET('/api/v1/users/current').then((res) => {
       res.auth && this.setLoggedIn(res);
     }).catch((err) => {
       console.log(err);
@@ -87,14 +77,12 @@ export class AuthProvider extends Component {
 export const upGuest = Component => (props) => (
   <Consumer>
     {
-      ({auth, name, vkId, avatar, dormId, floorId, roomId, role, setLoggedIn, logout}) => (
+      ({auth, name, vkId, avatar, roomId, role, setLoggedIn, logout}) => (
         <Component
           auth={auth}
           name={name}
           vkId={vkId}
           avatar={avatar}
-          dormId={dormId}
-          floorId={floorId}
           roomId={roomId}
           role={role}
           setLoggedIn={setLoggedIn}
@@ -109,15 +97,13 @@ export const upGuest = Component => (props) => (
 export const upAuth = Component => (props) => (
   <Consumer>
     {
-      ({auth, name, vkId, avatar, dormId, floorId, roomId, role, setLoggedIn, logout}) => (
+      ({auth, name, vkId, avatar, roomId, role, setLoggedIn, logout}) => (
         auth ?
           <Component
             auth={auth}
             name={name}
             vkId={vkId}
             avatar={avatar}
-            dormId={dormId}
-            floorId={floorId}
             roomId={roomId}
             role={role}
             setLoggedIn={setLoggedIn}
@@ -134,15 +120,13 @@ export const upAuth = Component => (props) => (
 export const onlyGuest = Component => (props) => (
   <Consumer>
     {
-      ({auth, name, vkId, avatar, dormId, floorId, roomId, role, setLoggedIn, logout}) => (
+      ({auth, name, vkId, avatar, roomId, role, setLoggedIn, logout}) => (
         !auth &&
         <Component
           auth={auth}
           name={name}
           vkId={vkId}
           avatar={avatar}
-          dormId={dormId}
-          floorId={floorId}
           roomId={roomId}
           role={role}
           setLoggedIn={setLoggedIn}
@@ -157,15 +141,13 @@ export const onlyGuest = Component => (props) => (
 export const onlyAuth = Component => (props) => (
   <Consumer>
     {
-      ({auth, name, vkId, avatar, dormId, floorId, roomId, role, setLoggedIn, logout}) => (
-        auth && (!dormId || !floorId || !roomId) &&
+      ({auth, name, vkId, avatar, roomId, role, setLoggedIn, logout}) => (
+        auth && !roomId &&
         <Component
           auth={auth}
           name={name}
           vkId={vkId}
           avatar={avatar}
-          dormId={dormId}
-          floorId={floorId}
           roomId={roomId}
           role={role}
           setLoggedIn={setLoggedIn}
@@ -180,15 +162,13 @@ export const onlyAuth = Component => (props) => (
 export const onlyFullAuth = Component => (props) => (
   <Consumer>
     {
-      ({auth, name, vkId, avatar, dormId, floorId, roomId, role, setLoggedIn, logout}) => (
-        auth && dormId && floorId && roomId ? 
+      ({auth, name, vkId, avatar, roomId, role, setLoggedIn, logout}) => (
+        auth && roomId ? 
           <Component
             auth={auth}
             name={name}
             vkId={vkId}
             avatar={avatar}
-            dormId={dormId}
-            floorId={floorId}
             roomId={roomId}
             role={role}
             setLoggedIn={setLoggedIn}
