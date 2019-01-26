@@ -22,33 +22,113 @@ const FabWrapper = styled.div`
 
 class Settings extends Component {
   state = {
-    loaded: false,
-    dormId: null,
-    floorId: null,
-    roomId: null,
+    loaded: [],
+    dormId: '',
+    floorId: '',
+    roomId: '',
     dorms: [],
     floors: [],
     rooms: [],
   };
 
   componentDidMount = () => {
-    this.setState({
-      dormId: this.props.dormId,
-      floorId: this.props.floorId,
-      roomId: this.props.roomId,
-    }, () => {
-      requestGET('/api/dorm/list').then((res) => {
-        this.setState({ dorms: res });
+    this.addLoadedElement('dorms', () => {
+      requestGET(`/api/v1/dorms`).then((dorms) => {
+        this.setState({ dorms });
       }).catch((err) => {
         console.log(err);
       }).finally(() => {
-        this.setState({ loaded: true });
+        this.removeLoadedElement('dorms');
+      });
+    });
+    
+    if (this.props.roomId) { 
+      this.addLoadedElement('currentRoom', () => {
+        requestGET(`/api/v1/rooms/${this.props.roomId}`).then((res) => {
+          this.setState({
+            dormId: res.dorm_id,
+            floorId: res.floor_id,
+            roomId: res.id,
+          }, () => {
+            this.addLoadedElement('floors', () => {
+              requestGET(`/api/v1/dorms/${this.state.dormId}/floors`).then((floors) => {
+                this.setState({ floors });
+              }).catch((err) => {
+                console.log(err);
+              }).finally(() => {
+                this.removeLoadedElement('floors');
+              });
+            });
+            this.addLoadedElement('rooms', () => {
+              requestGET(`/api/v1/floors/${this.state.floorId}/rooms`).then((rooms) => {
+                this.setState({ rooms });
+              }).catch((err) => {
+                console.log(err);
+              }).finally(() => {
+                this.removeLoadedElement('rooms');
+              });
+            });
+          });
+        }).catch((err) => {
+          console.log(err);
+        }).finally(() => {
+          this.removeLoadedElement('currentRoom');
+        });
+      });
+    }
+  };
+
+  addLoadedElement = (element, callback) => {
+    this.setState((prev) => ({
+      loaded: [...prev.loaded, element]
+    }), callback);
+  }
+
+  removeLoadedElement = (element) => {
+    let loaded = [...this.state.loaded];
+    loaded.splice(loaded.indexOf(element), 1);
+    this.setState({ loaded });
+  }
+
+  handleDorm = (event) => {
+    this.setState({
+      dormId: event.target.value,
+      floorId: '',
+      roomId: '',
+    }, () => {
+      this.addLoadedElement('floors', () => {
+        requestGET(`/api/v1/dorms/${this.state.dormId}/floors`).then((floors) => {
+          this.setState({ floors });
+        }).catch((err) => {
+          console.log(err);
+        }).finally(() => {
+          this.removeLoadedElement('floors')
+        });
       });
     });
   };
 
-  handleChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
+  handleFloor = (event) => {
+    this.setState({
+      floorId: event.target.value,
+      roomId: '',
+    }, () => {
+      this.addLoadedElement('rooms', () => {
+        requestGET(`/api/v1/floors/${this.state.floorId}/rooms`).then((rooms) => {
+          this.setState({ rooms });
+        }).catch((err) => {
+          console.log(err);
+        }).finally(() => {
+          this.removeLoadedElement('rooms');
+        });
+      });
+    });
+  };
+
+  handleRoom = (event) => {
+    this.setState({
+      roomId: event.target.value,
+    });
   };
 
   render() {
@@ -61,10 +141,10 @@ class Settings extends Component {
               <InputLabel htmlFor="filled-dorm-simple">Общежитие</InputLabel>
               <Select
                 value={this.state.dormId}
-                onChange={this.handleChange}
-                input={<FilledInput name="dorm" id="filled-dorm-simple" />}
+                onChange={this.handleDorm}
+                input={<FilledInput name="dormId" id="filled-dorm-simple" />}
               >
-                <MenuItem>
+                <MenuItem value="">
                   <em>Не выбрано</em>
                 </MenuItem>
                 {this.state.dorms.map((dorm)=>(
@@ -77,14 +157,14 @@ class Settings extends Component {
               <Select
                 disabled={!this.state.dormId}
                 value={this.state.floorId}
-                onChange={this.handleChange}
-                input={<FilledInput name="floor" id="filled-floor-simple" />}
+                onChange={this.handleFloor}
+                input={<FilledInput name="floorId" id="filled-floor-simple" />}
               >
-                <MenuItem>
+                <MenuItem value="">
                   <em>Не выбрано</em>
                 </MenuItem>
                 {this.state.floors.map((floor)=>(
-                  <MenuItem value={floor.id}>{floor.name}</MenuItem>
+                  <MenuItem value={floor.id}>{floor.number}</MenuItem>
                 ))}
               </Select>
             </StyledControl>
@@ -93,14 +173,14 @@ class Settings extends Component {
               <Select
                 disabled={!this.state.dormId || !this.state.floorId}
                 value={this.state.roomId}
-                onChange={this.handleChange}
-                input={<FilledInput name="room" id="filled-room-simple" />}
+                onChange={this.handleRoom}
+                input={<FilledInput name="roomId" id="filled-room-simple" />}
               >
-                <MenuItem>
+                <MenuItem value="">
                   <em>Не выбрано</em>
                 </MenuItem>
                 {this.state.rooms.map((room)=>(
-                  <MenuItem value={room.id}>{room.name}</MenuItem>
+                  <MenuItem value={room.id}>{room.number}</MenuItem>
                 ))}
               </Select>
             </StyledControl>  
@@ -117,7 +197,7 @@ class Settings extends Component {
             </FabWrapper>
           </Grid>
         </Grid>
-        <Loader isOpen={!this.state.loaded} />
+        <Loader isOpen={!!this.state.loaded.length} />
       </Container>
     )
   }
