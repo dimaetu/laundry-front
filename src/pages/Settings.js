@@ -32,10 +32,13 @@ class Settings extends Component {
   };
 
   componentDidMount = () => {
+    const { enqueueSnackbar } = this.props;
+    
     this.addLoadedElement('dorms', () => {
       requestGET(`/api/v1/dorms`).then((dorms) => {
         this.setState({ dorms });
       }).catch((err) => {
+        enqueueSnackbar('Ошибка при соединении с сервером', { variant: 'error' });
         console.log(err);
       }).finally(() => {
         this.removeLoadedElement('dorms');
@@ -54,6 +57,7 @@ class Settings extends Component {
               requestGET(`/api/v1/dorms/${this.state.dormId}/floors`).then((floors) => {
                 this.setState({ floors });
               }).catch((err) => {
+                enqueueSnackbar('Ошибка при соединении с сервером', { variant: 'error' });
                 console.log(err);
               }).finally(() => {
                 this.removeLoadedElement('floors');
@@ -63,6 +67,7 @@ class Settings extends Component {
               requestGET(`/api/v1/floors/${this.state.floorId}/rooms`).then((rooms) => {
                 this.setState({ rooms });
               }).catch((err) => {
+                enqueueSnackbar('Ошибка при соединении с сервером', { variant: 'error' });
                 console.log(err);
               }).finally(() => {
                 this.removeLoadedElement('rooms');
@@ -70,6 +75,7 @@ class Settings extends Component {
             });
           });
         }).catch((err) => {
+          enqueueSnackbar('Ошибка при соединении с сервером', { variant: 'error' });
           console.log(err);
         }).finally(() => {
           this.removeLoadedElement('currentRoom');
@@ -91,6 +97,7 @@ class Settings extends Component {
   }
 
   handleDorm = (event) => {
+    const { enqueueSnackbar } = this.props;
     this.setState({
       dormId: event.target.value,
       floorId: '',
@@ -100,6 +107,7 @@ class Settings extends Component {
         requestGET(`/api/v1/dorms/${this.state.dormId}/floors`).then((floors) => {
           this.setState({ floors });
         }).catch((err) => {
+          enqueueSnackbar('Ошибка при соединении с сервером', { variant: 'error' });
           console.log(err);
         }).finally(() => {
           this.removeLoadedElement('floors')
@@ -109,6 +117,7 @@ class Settings extends Component {
   };
 
   handleFloor = (event) => {
+    const { enqueueSnackbar } = this.props;
     this.setState({
       floorId: event.target.value,
       roomId: '',
@@ -117,6 +126,7 @@ class Settings extends Component {
         requestGET(`/api/v1/floors/${this.state.floorId}/rooms`).then((rooms) => {
           this.setState({ rooms });
         }).catch((err) => {
+          enqueueSnackbar('Ошибка при соединении с сервером', { variant: 'error' });
           console.log(err);
         }).finally(() => {
           this.removeLoadedElement('rooms');
@@ -137,12 +147,25 @@ class Settings extends Component {
       requestPOST(`/api/v1/users/current/update`, {
         room_id: this.state.roomId,
       }).then((res) => {
-        enqueueSnackbar('Successfully fetched the data.', { 
-          variant: 'success',
-        });
-        updateUser({
-          roomId: this.state.roomId,
-        });
+        if (!res.success) {
+          enqueueSnackbar(res.message, { variant: 'error' });
+        }
+        if (!res.auth) {
+          updateUser({
+            auth: false,
+            name: '',
+            vkId: '',
+            avatar: '',
+            roomId: null,
+            role: null,
+          });
+        }
+        if (res.success) {
+          enqueueSnackbar(res.message, { variant: 'success' });
+          updateUser({
+            roomId: this.state.roomId,
+          });
+        }
       }).catch((err) => {
         console.log(err);
       }).finally(() => {
