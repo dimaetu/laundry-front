@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import Loader from './Loader';
 import { requestGET } from './Requests';
+import { withSnackbar } from 'notistack';
  
 const { Provider, Consumer } = React.createContext({
   auth: false,
@@ -13,7 +14,7 @@ const { Provider, Consumer } = React.createContext({
   updateUser: () => {},
 });
  
-export class AuthProvider extends Component {
+class Auth extends Component {
   state = {
     checkAuth: false,
     auth: false,
@@ -41,9 +42,12 @@ export class AuthProvider extends Component {
   }
 
   componentDidMount = () => {
+    const { enqueueSnackbar } = this.props;
+    
     requestGET('/api/v1/users/current').then((res) => {
       res.auth && this.setLoggedIn(res);
     }).catch((err) => {
+      enqueueSnackbar('Ошибка при соединении с сервером', { variant: 'error' });
       console.log(err);
     }).finally(() => {
       this.setState({ checkAuth: true });
@@ -64,6 +68,9 @@ export class AuthProvider extends Component {
     )
   }
 }
+
+const AuthProvider = withSnackbar(Auth);
+export { AuthProvider }
 
 export const upGuest = Component => (props) => (
   <Consumer>
