@@ -37,10 +37,15 @@ const Title = styled.h1`
 `;
 
 const Name = styled.span`
-  text-transform: none;
-  margin-right: 8px;
-  line-height: 40px;
-  color: #fff;
+  display: none;
+
+  @media (min-width: 600px) {
+    display: inline;
+    text-transform: none;
+    margin-right: 8px;
+    line-height: 40px;
+    color: #fff;
+  }
 `;
 
 const ButtonText = styled.span`
